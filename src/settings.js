@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '花好月圆意向匹配系统',
 
   /**
    * @type {boolean} true | false

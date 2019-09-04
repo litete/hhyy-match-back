@@ -15,3 +15,10 @@ export function selectUser(pageInfo) {
   })
 }
 
+export function addUser(data) {
+  return request({
+    url: '/user/register',
+    method: 'POST',
+    data:data
+  })
+}

@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="addButton" style="text-align:right;margin:0px auto 0px auto;">
-      <el-button type="primary" @click="addInfo">新增</el-button>
+      <el-button type="primary" @click="openDialog()">新增</el-button>
     </div>
     <div class="dashboard-text" style="text-align:center">
       <el-table :data="listData" border style="width: 100%;" v-loading="listLoading">
@@ -28,25 +28,69 @@
       @current-change="handleCurrentChange"
       @pagination="getList"
     />
+
+      <el-dialog title="用户信息" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+          <el-form-item label="姓名" :label-width="formLabelWidth">
+            <el-input v-model="form.firstname" autocomplete="off"></el-input>
+          </el-form-item>
+
+          <el-form-item label="性别" :label-width="formLabelWidth" >
+            <el-select
+              v-model="form.gender"
+              placeholder="请选择性别"
+              clearable
+            >
+              <el-option
+                v-for="(lable, value,index) in genderStatus"
+                :key="index"
+                :label="lable"
+                :value="value"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="手机号" :label-width="formLabelWidth">
+            <el-input v-model="form.mobile" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="编号" :label-width="formLabelWidth">
+            <el-input v-model="form.number" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import {selectUser} from "@/api/user"
+import { selectUser, addUser } from "@/api/user";
+import { genderStatus } from "@/js/marriage.js";
 
 export default {
   name: "Dashboard",
-  created(){
-    this.getList()
+  created() {
+    this.getList();
   },
   data() {
     return {
+      dialogFormVisible: false,
+      genderStatus: genderStatus,
+      form: {
+        firstname: "",
+        gender: "",
+        mobile: "",
+        number: ""
+      },
+      formLabelWidth: "120px",
       pageSizes: [10, 20, 30, 50],
       total: 0,
-      listQuery:{
-        page:1,
-        size:10
+      listQuery: {
+        page: 1,
+        size: 10
       },
       listLoading: false,
       isOpen: "开启",
@@ -54,21 +98,34 @@ export default {
     };
   },
   methods: {
-    getList(){
+    getList() {
       this.listLoading = true;
-      selectUser(this.listQuery).then(response=>{
+      selectUser(this.listQuery).then(response => {
         this.listData = response.data.records;
         this.total = response.data.total;
         this.listLoading = false;
-      })
+      });
+    },
+    openDialog(){
+      this.dialogFormVisible = true
+    },
+    addUser() {
+      this.dialogFormVisible = false;
+      var formData = new FormData();
+      formData.append("form", this.form);
+      addUser(this.form).then(res => {
+        if (res.code == 200) {
+          this.openSuccess(res.data);
+        } else if ((res.code = 500)) {
+          this.openError(res.data.message);
+        }
+      });
     },
     handleClick(row) {
       console.log(row);
     },
-    addInfo() {},
-    changeOpen() {
-     },
-     handleSizeChange(val) {
+    changeOpen() {},
+    handleSizeChange(val) {
       this.listQuery.size = val;
       this.listQuery.page = 1;
       this.getList();
@@ -76,6 +133,19 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.page = val;
       this.getList();
+    },
+    openSuccess(message) {
+      this.$notify({
+        title: "成功",
+        message: message,
+        type: "success"
+      });
+    },
+    openError(message) {
+      this.$notify.error({
+        title: "失败",
+        message: message
+      });
     }
   }
 };
