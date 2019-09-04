@@ -11,13 +11,9 @@
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
           <!-- <i class="el-icon-caret-bottom" />-->
         </div>
-        <!--<el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              主页
-            </el-dropdown-item>
-          </router-link>
-        </el-dropdown-menu>-->
+        <el-dropdown-menu slot="dropdown" class="user-dropdown">
+        
+        </el-dropdown-menu>
       </el-dropdown> 
     </div>
   </div>
