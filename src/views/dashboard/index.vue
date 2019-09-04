@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="addButton" style="text-align:right;margin:0px auto 0px auto;">
-      <el-button type="primary" @click="openDialog()">新增</el-button>
+      <el-button type="primary" @click="dialogFormVisible = true">新增</el-button>
     </div>
     <div class="dashboard-text" style="text-align:center">
       <el-table v-loading="listLoading" :data="listData" border style="width: 100%;">
@@ -59,7 +59,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addUser()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -112,8 +112,11 @@ export default {
     addUser() {
       this.dialogFormVisible = false
       var formData = new FormData()
-      formData.append('form', this.form)
-      addUser(this.form).then(res => {
+      formData.append('firstname', this.form.firstname)
+      formData.append('gender', this.form.gender)
+      formData.append('mobile', this.form.mobile)
+      formData.append('number', this.form.number)
+      addUser(formData).then(res => {
         if (res.code == 200) {
           this.openSuccess(res.data)
         } else if ((res.code = 500)) {
