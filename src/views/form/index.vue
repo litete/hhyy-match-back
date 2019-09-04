@@ -2,10 +2,10 @@
   <div class="dashboard-container">
     <div class="dashboard-text" style="text-align:center">
       <el-table v-loading="listLoading" :data="listData" border style="width: 100%;">
-        <el-table-column align="center" prop="firstname" label="男孩编号" width="197" />
-        <el-table-column align="center" prop="mobile" label="男孩姓名" width="200" />
-        <el-table-column align="center" prop="mobile" label="女孩编号" width="197" />
-        <el-table-column align="center" prop="mobile" label="女孩姓名" width="200" />
+        <el-table-column align="center" prop="boyNumber" label="男孩编号" width="197" />
+        <el-table-column align="center" prop="boyName" label="男孩姓名" width="200" />
+        <el-table-column align="center" prop="girlNumber" label="女孩编号" width="197" />
+        <el-table-column align="center" prop="girlName" label="女孩姓名" width="200" />
         <el-table-column align="center" label="操作" width="300">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
