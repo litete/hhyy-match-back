@@ -5,15 +5,15 @@
     </div>
     <div class="dashboard-text" style="text-align:center">
       <el-table v-loading="listLoading" :data="listData" border style="width: 100%;">
-        <el-table-column align="center" prop="firstname" label="姓名" width="400" />
-        <el-table-column align="center" prop="mobile" label="手机号" width="500" />
-        <el-table-column align="center" prop="number" label="编号" width="400" />
-        <el-table-column align="center" label="操作" width="349">
+        <el-table-column align="center" prop="firstname" label="姓名" width="500" />
+        <el-table-column align="center" prop="mobile" label="手机号" width="600" />
+        <el-table-column align="center" prop="number" label="编号" width="549" />
+        <!-- <el-table-column align="center" label="操作" width="349">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small" @click="updateUser(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="deleteUser(scope.row)">删除</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
     <el-pagination
@@ -36,11 +36,7 @@
         </el-form-item>
 
         <el-form-item label="性别" :label-width="formLabelWidth">
-          <el-select
-            v-model="form.gender"
-            placeholder="请选择性别"
-            clearable
-          >
+          <el-select v-model="form.gender" placeholder="请选择性别" clearable>
             <el-option
               v-for="(lable, value,index) in genderStatus"
               :key="index"
@@ -66,23 +62,23 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { selectUser, addUser } from '@/api/user'
-import { genderStatus } from '@/js/marriage.js'
+import { mapGetters } from "vuex";
+import { selectUser, addUser } from "@/api/user";
+import { genderStatus } from "@/js/marriage.js";
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   data() {
     return {
       dialogFormVisible: false,
       genderStatus: genderStatus,
       form: {
-        firstname: '',
-        gender: '',
-        mobile: '',
-        number: ''
+        firstname: "",
+        gender: "",
+        mobile: "",
+        number: ""
       },
-      formLabelWidth: '120px',
+      formLabelWidth: "120px",
       pageSizes: [10, 20, 30, 50],
       total: 0,
       listQuery: {
@@ -90,68 +86,71 @@ export default {
         size: 10
       },
       listLoading: false,
-      isOpen: '开启',
+      isOpen: "开启",
       listData: []
-    }
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
-      this.listLoading = true
+      this.listLoading = true;
       selectUser(this.listQuery).then(response => {
-        this.listData = response.data.records
-        this.total = response.data.total
-        this.listLoading = false
-      })
+        this.listData = response.data.records;
+        this.total = response.data.total;
+        this.listLoading = false;
+      });
     },
     openDialog() {
-      this.dialogFormVisible = true
+      this.dialogFormVisible = true;
     },
     addUser() {
-      this.dialogFormVisible = false
-      var formData = new FormData()
-      formData.append('firstname', this.form.firstname)
-      formData.append('gender', this.form.gender)
-      formData.append('mobile', this.form.mobile)
-      formData.append('number', this.form.number)
+      this.dialogFormVisible = false;
+      var formData = new FormData();
+      formData.append("firstname", this.form.firstname);
+      formData.append("gender", this.form.gender);
+      formData.append("mobile", this.form.mobile);
+      formData.append("number", this.form.number);
       addUser(formData).then(res => {
         if (res.code == 200) {
-          this.openSuccess(res.data)
+          this.openSuccess(res.data);
         } else if ((res.code = 500)) {
-          this.openError(res.data.message)
+          this.openError(res.data.message);
         }
-      })
+      });
     },
-    handleClick(row) {
-      console.log(row)
+    updateUser(row) {
+      console.log(row);
+    },
+    deleteUser(row) {
+      console.log(row);
     },
     changeOpen() {},
     handleSizeChange(val) {
-      this.listQuery.size = val
-      this.listQuery.page = 1
-      this.getList()
+      this.listQuery.size = val;
+      this.listQuery.page = 1;
+      this.getList();
     },
     handleCurrentChange(val) {
-      this.listQuery.page = val
-      this.getList()
+      this.listQuery.page = val;
+      this.getList();
     },
     openSuccess(message) {
       this.$notify({
-        title: '成功',
+        title: "成功",
         message: message,
-        type: 'success'
-      })
+        type: "success"
+      });
     },
     openError(message) {
       this.$notify.error({
-        title: '失败',
+        title: "失败",
         message: message
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
