@@ -8,3 +8,10 @@ export function login(data) {
   })
 }
 
+export function selectUser(pageInfo) {
+  return request({
+    url: '/user?page='+pageInfo.page+'&size='+pageInfo.size,
+    method: 'GET'
+  })
+}
+
