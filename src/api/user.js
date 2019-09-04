@@ -10,7 +10,7 @@ export function login(data) {
 
 export function selectUser(pageInfo) {
   return request({
-    url: '/user?page='+pageInfo.page+'&size='+pageInfo.size,
+    url: '/user?page=' + pageInfo.page + '&size=' + pageInfo.size,
     method: 'GET'
   })
 }
@@ -19,6 +19,6 @@ export function addUser(data) {
   return request({
     url: '/user/register',
     method: 'POST',
-    data:data
+    data: data
   })
 }
