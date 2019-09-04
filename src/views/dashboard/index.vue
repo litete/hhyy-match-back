@@ -90,7 +90,6 @@ export default {
         size: 10
       },
       listLoading: false,
-      isOpen: '开启',
       listData: []
     }
   },

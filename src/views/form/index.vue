@@ -1,49 +1,31 @@
 <template>
-  <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Activity name">
-        <el-input v-model="form.name" />
-      </el-form-item>
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;" />
-        </el-col>
-        <el-col :span="2" class="line">-</el-col>
-        <el-col :span="11">
-          <el-time-picker v-model="form.date2" type="fixed-time" placeholder="Pick a time" style="width: 100%;" />
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery" />
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type" />
-          <el-checkbox label="Promotion activities" name="type" />
-          <el-checkbox label="Offline activities" name="type" />
-          <el-checkbox label="Simple brand exposure" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor" />
-          <el-radio label="Venue" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input v-model="form.desc" type="textarea" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="onCancel">Cancel</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="dashboard-container">
+    <div class="dashboard-text" style="text-align:center">
+      <el-table v-loading="listLoading" :data="listData" border style="width: 100%;">
+        <el-table-column align="center" prop="firstname" label="男孩编号" width="197" />
+        <el-table-column align="center" prop="mobile" label="男孩姓名" width="200" />
+        <el-table-column align="center" prop="mobile" label="女孩编号" width="197" />
+        <el-table-column align="center" prop="mobile" label="女孩姓名" width="200" />
+        <el-table-column align="center" label="操作" width="300">
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
+            <el-button type="text" size="small">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <el-pagination
+      v-show="total>0"
+      :total="total"
+      :page-sizes="pageSizes"
+      :page-size="listQuery.size"
+      :current-page="listQuery.page"
+      background
+      layout="prev, pager, next"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      @pagination="getList"
+    />
   </div>
 </template>
 
@@ -52,35 +34,43 @@ export default {
   data() {
     return {
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      }
-    }
+        firstname: "",
+        gender: "",
+        mobile: "",
+        number: ""
+      },
+      formLabelWidth: "120px",
+      pageSizes: [10, 20, 30, 50],
+      total: 0,
+      listQuery: {
+        page: 1,
+        size: 10
+      },
+      listLoading: false,
+      isOpen: "开启"
+    };
   },
-  methods: {
-
-    onSubmit() {
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
-    }
-  }
-}
+  methods: {}
+};
 </script>
 
-<style scoped>
-.line{
-  text-align: center;
+<style lang="scss" scoped>
+.dashboard {
+  &-container {
+    margin: 30px;
+  }
+  &-text {
+    font-size: 30px;
+    line-height: 46px;
+    display: flex;
+  }
+}
+
+.dashboard-text {
+  margin-top: 30px;
+}
+
+.addButton {
 }
 </style>
 
